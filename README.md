@@ -1,31 +1,5 @@
+# examor Documentation
 </br>
-
-<p>
-  <img width="245" src="/docs/logo-text.png" />
-</p>
-
-<p>
-  <a href="https://github.com/codeacme17/examor/blob/main/docs/zh-doc.md">
-    <img height="21" src="https://img.shields.io/badge/中文文档-7d09f1?style=flat-square" alt="zh-cn">
-  </a>
-  <a href="https://github.com/codeacme17/examor/blob/main/docs/ROADMAP.md">
-    <img height="21" src="https://img.shields.io/badge/ROADMAP-7d09f1?style=flat-square" alt="roadmap">
-  </a>
-  <a href="https://twitter.com/codeacme17">
-    <img height="21" src="https://img.shields.io/badge/Twitter_Follow-%23fff?style=flat-square&logo=twitter&logoColor=7d09f1" alt="reddit">
-  </a>
-  <a href="https://www.producthunt.com/posts/examor?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-examor">
-    <img height="21" src="https://img.shields.io/badge/Product%20Hunt-fff?style=flat-square&logo=producthunt&logoColor=7d09f1" alt="producthunt">
-  </a>
-  <a href="https://github.com/codeacme17/examor/blob/main/LICENSE">
-    <img height="21" src="https://img.shields.io/badge/License-AGPL--3.0-ffffff?style=flat-square&labelColor=fff&color=7d09f1" alt="license">
-  </a>
-</p>
-
-<!--
-> [!IMPORTANT]
-> **This project is still in its early stages with many issues and bugs to be addressed**. Therefore, we warmly welcome your valuable feedback and bug reports to help improve this project together! If you have any ideas or questions, please feel free to raise them in [Discussions](https://github.com/codeacme17/examor/discussions). We look forward to your participation!
--->
 
 <p>
   <strong>
@@ -44,19 +18,15 @@
 
 ## 💡 Inspiration
 
-> **For learners, one of the best habits should be regular self-testing** - _Make It Stick: The Science of Successful Learning_
 
 When I'm learning a new technology, I have the habit of taking notes and jotting down important information. It's a good habit, but I also have a bad habit of not enjoying reading the notes I've written (I'm not sure if this is the case for most people 🤔). This results in my notes becoming mere mementos without substantial use. That's why I choose to create an application that continuously prompts you with questions to review your note contents.
 
 ## 🏁 Start
 
-> [!IMPORTANT]
-> Highly recommend reading [Best Documentation Practices](https://github.com/codeacme17/examor/blob/main/docs/best-practices/en-best-practices.md) before uploading notes to optimize your document.
-
 #### Clone this repo
 
 ```bash
-git clone https://github.com/codeacme17/examor.git
+git clone https://github.com/DwaipayanSom/examor
 cd examor
 ```
 
@@ -65,7 +35,13 @@ cd examor
 ```bash
 docker-compose up
 ```
+#### Run Kubernetes Cluster
 
+```bash
+kubectl apply -f Deployment.yaml
+kubectl apply -f Service.yaml
+kubectl apply -f Ingress.yaml
+```
 > Please make sure Docker is installed on your local machine, and ports `51717`, `51818`, and `52020` are available on your local host
 
 Open `http://localhost:51818` in your browser to access Examor. (Due to optimization scheme for modules, it may be slow when loading the program or entering a certain page for the first time)
@@ -91,7 +67,6 @@ Regarding the actual function, once GPT generates a test, the score is recorded 
 > [!NOTE]
 > Recommend to use the GPT-4 model for a stable experience.
 
-<img width="500" src="/docs/screen-shot/en-role.png" />
 
 Roles can provide more possibilities for question generation and assessment. You can set roles in the configuration page. For more information about various roles, it's recommended to refer to the [Role Manual](/docs/en-role.md).
 
@@ -99,11 +74,8 @@ Roles can provide more possibilities for question generation and assessment. You
 
 Choose the question type when creating notes.
 
-<img  width="400"  src="/docs/screen-shot/en-question-type.png" />
-
 When practicing questions, you can answer using different methods. The image below shows an example of a single-choice question.
 
-<img  width="700"  src="/docs/screen-shot/en-question-type-answer.png" />
 
 ## 🧩 Modules
 
@@ -145,7 +117,6 @@ When starting the project, the application checks for updates. If an update is r
 
 1. Export your notes, questions, or configuration items as a backup through the **Export Configuration and Notes** button on the personal settings page. This will export a file named `examor-data.xlsx`. You can view the file contents, **but it's not recommended to modify the file content**
 
-   <img width="700" src="/docs/screen-shot/en-export-import.png" />
 
 2. Pull the latest remote code updates to refresh your local project.
 
@@ -153,23 +124,5 @@ When starting the project, the application checks for updates. If an update is r
 
 4. Once the build is successful, navigate to the personal settings page, click the **Import File** button, and re-import the backed-up data into the project.
 
-> The current updating process is based on my personal usage. It might not be the best way to update. If you have better update methods, please feel free to provide assistance in the issues section ❤️
 
-<!--
-## 🤩 Star History
-<a href="https://star-history.com/#codeacme17/examor&Timeline">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=codeacme17/examor&type=Timeline&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=codeacme17/examor&type=Timeline" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=codeacme17/examor&type=Timeline" />
-  </picture>
-</a>
--->
 
-## Contributing
-
-**Since the project is in a very early stage, there are still many problems and bugs in the project.** If you find a bug or have an idea for a new feature, please submit an issue or pull request. See more in [CONTRIBUTING](/CONTRIBUTING.md).
-
-## License
-
-[AGPL-3.0 license](/LICENSE) © 2023-Present [leyoonafr](https://github.com/codeacme17)
