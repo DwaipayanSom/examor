@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: solid-gpt-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: solid-gpt
+  template:
+    metadata:
+      labels:
+        app: solid-gpt
+    spec:
+      containers:
+      - name: solid-gpt
+        image: solid_gpt
+        ports:
+        - containerPort: 51818
