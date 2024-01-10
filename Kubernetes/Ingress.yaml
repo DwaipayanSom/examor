@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: solid-gpt-ingress
+  name: examor-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: solid-gpt.example.com  # Replace with your domain
+  - host: examor.example.com  
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: solid-gpt-service
+            name: examor-service
             port:
               number: 80
