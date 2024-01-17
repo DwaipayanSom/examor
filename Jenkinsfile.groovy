@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_VERSION = '1.29.2'
+        DOCKER_COMPOSE_VERSION = '3'
         DOCKER_APP_IMAGE = 'examor/app:latest'
         DOCKER_SERVER_IMAGE = 'examor/server:latest'
         DOCKER_DATABASE_IMAGE = 'examor/database:latest'
