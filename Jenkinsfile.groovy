@@ -1,29 +1,79 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage('Clone'){
-            steps{
-                git url: 'https://github.com/DwaipayanSom/examor.git', branch: 'master'
+
+    environment {
+        DOCKER_COMPOSE_VERSION = '1.29.2'
+        DOCKER_APP_IMAGE = 'examor/app:latest'
+        DOCKER_SERVER_IMAGE = 'examor/server:latest'
+        DOCKER_DATABASE_IMAGE = 'examor/database:latest'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
             }
         }
-        stage('Build and Test'){
-            steps{
-                sh 'docker build . -t examor:latest'
-            }
-        }
-        stage('Login and Push Image'){
-            steps{
-                withCredentials([usernamePassword(credentialsId:'dockerhub_credentials',passwordVariable:'dockerhub_password',usernameVariable:'dockerhub_username')]){
-                    sh "docker login -u ${env.dockerhub_username} -p ${env.dockerhub_password}"
-                    sh "docker push dwaipayansom/node-todo-app-cicd:latest"
+
+        stage('Build and Push App Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.example.com', 'docker-hub-credentials') {
+                        docker.build(DOCKER_APP_IMAGE, './app/')
+                        docker.image(DOCKER_APP_IMAGE).push()
+                    }
                 }
             }
         }
-        stage('Deploy'){
-            steps{
-                sh 'docker-compose down && docker-compose up -d'
+
+        stage('Build and Push Server Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.example.com', 'docker-hub-credentials') {
+                        docker.build(DOCKER_SERVER_IMAGE, './server/')
+                        docker.image(DOCKER_SERVER_IMAGE).push()
+                    }
+                }
+            }
+        }
+
+        stage('Build and Push Database Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.example.com', 'docker-hub-credentials') {
+                        docker.build(DOCKER_DATABASE_IMAGE, './database/')
+                        docker.image(DOCKER_DATABASE_IMAGE).push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    sh "docker-compose -f docker-compose.yml up -d"
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                // Add your test steps here
             }
         }
     }
-}
 
+    post {
+        always {
+            script {
+                sh "docker-compose -f docker-compose.yml down"
+            }
+        }
+        success {
+            echo 'Build and deployment successful!'
+        }
+        failure {
+            echo 'Build or deployment failed!'
+        }
+    }
+}
