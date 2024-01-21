@@ -22,12 +22,12 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 script {
-                    sh 'kubectl apply -f kubernetes/app-deployment.yaml'
-                    sh 'kubectl apply -f kubernetes/app-service.yaml'
-                    sh 'kubectl apply -f kubernetes/server-deployment.yaml'
-                    sh 'kubectl apply -f kubernetes/server-service.yaml'
-                    sh 'kubectl apply -f kubernetes/database-deployment.yaml'
-                    sh 'kubectl apply -f kubernetes/database-service.yaml'
+                    sh 'kubectl apply -f Kubernetes Files/app-deployment.yaml'
+                    sh 'kubectl apply -f Kubernetes Files/app-service.yaml'
+                    sh 'kubectl apply -f Kubernetes Files/server-deployment.yaml'
+                    sh 'kubectl apply -f Kubernetes Files/server-service.yaml'
+                    sh 'kubectl apply -f Kubernetes Files/database-deployment.yaml'
+                    sh 'kubectl apply -f Kubernetes Files/database-service.yaml'
 
                     // Sleep for 15 seconds to simulate the delay
                     sh 'sleep 15'
