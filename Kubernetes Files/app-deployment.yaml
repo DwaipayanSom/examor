@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: app-container
+        image: your-registry/app-image:tag
+        ports:
+        - containerPort: 51818
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 51818
+          initialDelaySeconds: 15
