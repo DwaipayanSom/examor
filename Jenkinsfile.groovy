@@ -2,63 +2,36 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_VERSION = '3'
-        DOCKER_APP_IMAGE = 'examor/app:latest'
-        DOCKER_SERVER_IMAGE = 'examor/server:latest'
-        DOCKER_DATABASE_IMAGE = 'examor/database:latest'
+        DOCKER_REGISTRY = 'localhost:5000'
+        APP_IMAGE_NAME = 'examor/app'
+        SERVER_IMAGE_NAME = 'examor/server'
+        DATABASE_IMAGE_NAME = 'examor/database'
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Build and Push App Image') {
+        stage('Build and Load Docker Images') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.example.com', 'docker-hub-credentials') {
-                        docker.build(DOCKER_APP_IMAGE, './app/')
-                        docker.image(DOCKER_APP_IMAGE).push()
-                    }
+                    docker.build("-t ${DOCKER_REGISTRY}/${APP_IMAGE_NAME}:${BUILD_NUMBER} ./examor/app")
+                    docker.build("-t ${DOCKER_REGISTRY}/${SERVER_IMAGE_NAME}:${BUILD_NUMBER} ./examor/server")
+                    docker.build("-t ${DOCKER_REGISTRY}/${DATABASE_IMAGE_NAME}:${BUILD_NUMBER} ./examor/database")
                 }
             }
         }
 
-        stage('Build and Push Server Image') {
+        stage('Deploy to Minikube') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.example.com', 'docker-hub-credentials') {
-                        docker.build(DOCKER_SERVER_IMAGE, './server/')
-                        docker.image(DOCKER_SERVER_IMAGE).push()
-                    }
-                }
-            }
-        }
+                    sh 'kubectl apply -f kubernetes/app-deployment.yaml'
+                    sh 'kubectl apply -f kubernetes/app-service.yaml'
+                    sh 'kubectl apply -f kubernetes/server-deployment.yaml'
+                    sh 'kubectl apply -f kubernetes/server-service.yaml'
+                    sh 'kubectl apply -f kubernetes/database-deployment.yaml'
+                    sh 'kubectl apply -f kubernetes/database-service.yaml'
 
-        stage('Build and Push Database Image') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.example.com', 'docker-hub-credentials') {
-                        docker.build(DOCKER_DATABASE_IMAGE, './database/')
-                        docker.image(DOCKER_DATABASE_IMAGE).push()
-                    }
+                    // Sleep for 15 seconds to simulate the delay
+                    sh 'sleep 15'
                 }
-            }
-        }
-
-        stage('Deploy with Docker Compose') {
-            steps {
-                script {
-                    sh "docker-compose -f docker-compose.yml up -d"
-                }
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                // Add your test steps here
             }
         }
     }
@@ -66,14 +39,10 @@ pipeline {
     post {
         always {
             script {
-                sh "docker-compose -f docker-compose.yml down"
+                docker.image("${DOCKER_REGISTRY}/${APP_IMAGE_NAME}:${BUILD_NUMBER}").remove()
+                docker.image("${DOCKER_REGISTRY}/${SERVER_IMAGE_NAME}:${BUILD_NUMBER}").remove()
+                docker.image("${DOCKER_REGISTRY}/${DATABASE_IMAGE_NAME}:${BUILD_NUMBER}").remove()
             }
-        }
-        success {
-            echo 'Build and deployment successful!'
-        }
-        failure {
-            echo 'Build or deployment failed!'
         }
     }
 }
