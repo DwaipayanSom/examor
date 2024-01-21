@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REGISTRY = 'localhost:5000'
+        DOCKER_REGISTRY = 'index.docker.io'
         APP_IMAGE_NAME = 'examor/app'
         SERVER_IMAGE_NAME = 'examor/server'
         DATABASE_IMAGE_NAME = 'examor/database'
@@ -10,7 +10,14 @@ pipeline {
     }
 
     stages {
-        stage('Build and Load Docker Images') {
+
+        stage("Cloning the Repository"){
+            steps{
+                git url: "https://github.com/DwaipayanSom/examor.git", branch: "main"
+            }
+        }
+        
+        stage('Building and Loading the Docker Images') {
             steps {
                 script {
                     docker.build("-t ${DOCKER_REGISTRY}/${APP_IMAGE_NAME}:${IMAGE_TAG} ./examor/app")
