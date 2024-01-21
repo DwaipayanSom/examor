@@ -6,15 +6,16 @@ pipeline {
         APP_IMAGE_NAME = 'examor/app'
         SERVER_IMAGE_NAME = 'examor/server'
         DATABASE_IMAGE_NAME = 'examor/database'
+        IMAGE_TAG = 'latest'  
     }
 
     stages {
         stage('Build and Load Docker Images') {
             steps {
                 script {
-                    docker.build("-t ${DOCKER_REGISTRY}/${APP_IMAGE_NAME}:${BUILD_NUMBER} ./examor/app")
-                    docker.build("-t ${DOCKER_REGISTRY}/${SERVER_IMAGE_NAME}:${BUILD_NUMBER} ./examor/server")
-                    docker.build("-t ${DOCKER_REGISTRY}/${DATABASE_IMAGE_NAME}:${BUILD_NUMBER} ./examor/database")
+                    docker.build("-t ${DOCKER_REGISTRY}/${APP_IMAGE_NAME}:${IMAGE_TAG} ./examor/app")
+                    docker.build("-t ${DOCKER_REGISTRY}/${SERVER_IMAGE_NAME}:${IMAGE_TAG} ./examor/server")
+                    docker.build("-t ${DOCKER_REGISTRY}/${DATABASE_IMAGE_NAME}:${IMAGE_TAG} ./examor/database")
                 }
             }
         }
@@ -29,7 +30,6 @@ pipeline {
                     sh 'kubectl apply -f Kubernetes Files/database-deployment.yaml'
                     sh 'kubectl apply -f Kubernetes Files/database-service.yaml'
 
-                    // Sleep for 15 seconds to simulate the delay
                     sh 'sleep 15'
                 }
             }
@@ -39,9 +39,9 @@ pipeline {
     post {
         always {
             script {
-                docker.image("${DOCKER_REGISTRY}/${APP_IMAGE_NAME}:${BUILD_NUMBER}").remove()
-                docker.image("${DOCKER_REGISTRY}/${SERVER_IMAGE_NAME}:${BUILD_NUMBER}").remove()
-                docker.image("${DOCKER_REGISTRY}/${DATABASE_IMAGE_NAME}:${BUILD_NUMBER}").remove()
+                docker.image("${DOCKER_REGISTRY}/${APP_IMAGE_NAME}:${IMAGE_TAG}").remove()
+                docker.image("${DOCKER_REGISTRY}/${SERVER_IMAGE_NAME}:${IMAGE_TAG}").remove()
+                docker.image("${DOCKER_REGISTRY}/${DATABASE_IMAGE_NAME}:${IMAGE_TAG}").remove()
             }
         }
     }
