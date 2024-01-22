@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: server-container
-        image: your-registry/server-image:tag
+        image: index.docker.io/examor/server:latest 
         ports:
         - containerPort: 51717
         readinessProbe:
