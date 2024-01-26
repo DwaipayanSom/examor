@@ -7,10 +7,7 @@ spec:
     app: app
   ports:
   - protocol: TCP
-    port: 443  
+    port: 51818
     targetPort: 51818
-  tls:
-  - hosts:
-    - 192.168.49.2
-    secretName: tls-secret-name
+
 
