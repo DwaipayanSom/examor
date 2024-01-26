@@ -22,4 +22,9 @@ spec:
             path: /
             port: 51818
           initialDelaySeconds: 15
+      volumes:
+      - name: tls-secret-volume
+        secret:
+          secretName: tls-secret-name
+
 
