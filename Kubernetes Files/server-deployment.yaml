@@ -21,3 +21,8 @@ spec:
           tcpSocket:
             port: 51717
           initialDelaySeconds: 15
+      volumes:
+      - name: tls-secret-volume
+        secret:
+          secretName: tls-secret-name
+
