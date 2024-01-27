@@ -10,7 +10,7 @@ class MySQLHandler:
     def __init__(self):
         self.config = {
             'user': 'root',
-            'password': 'root',
+            'password': '',
             'host': 'database' if os.environ.get('DOCKER') else 'localhost',
             'port': '3306' if os.environ.get('DOCKER') else '52020',
             'database': 'db',
