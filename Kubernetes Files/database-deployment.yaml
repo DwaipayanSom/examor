@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: database-container
-        image: examor-database:latest  
+        image: examor/database:latest  
         ports:
         - containerPort: 3306
 
