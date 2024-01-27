@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: app-container
-        image: index.docker.io/examor/app:latest  
+        image: index.docker.io/examor-app:latest  
         ports:
         - containerPort: 51818
         readinessProbe:
