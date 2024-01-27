@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: database-container
-        image: index.docker.io/examor/database:latest  
+        image: index.docker.io/examor-database:latest  
         ports:
         - containerPort: 3306
 
