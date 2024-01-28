@@ -22,4 +22,5 @@ services:
     restart: always
     ports:
       - '52020:3306'
+    container_name: 'database'
 
