@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: examor/server:latest 
+        image: index.docker.io/examor/server:latest 
         imagePullPolicy: Always
         ports:
         - containerPort: 51717
