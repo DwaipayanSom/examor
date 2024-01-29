@@ -13,7 +13,7 @@ spec:
         app: database
     spec:
       containers:
-      - name: database-container
+      - name: database
         image: examor/database:latest  
         ports:
         - containerPort: 3306
