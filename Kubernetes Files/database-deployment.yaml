@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: database
-        image: examor/database:latest  
+        image: index.docker.io/examor/database:latest  
         imagePullPolicy: Always
         ports:
         - containerPort: 3306
