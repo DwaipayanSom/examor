@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: server-database-pod
+  labels:
+    app: server-database
+spec:
+  containers:
+  - name: server
+    image: dwaipayansom/examor-server:latest
+    ports:
+    - containerPort: 51717
+    readinessProbe:
+      tcpSocket:
+        port: 51717
+      initialDelaySeconds: 15
+  - name: database
+    image: dwaipayansom/examor-database:latest
+    ports:
+    - containerPort: 3306
