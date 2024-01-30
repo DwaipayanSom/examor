@@ -20,4 +20,4 @@ spec:
       - name: database
         image: dwaipayansom/examor-database:latest
         ports:
-        - containerPort: 3306
+        - containerPort: 52020
