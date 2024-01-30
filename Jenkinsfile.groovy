@@ -51,7 +51,7 @@ pipeline {
                     sh "${kubectlCmd} apply -f 'Kubernetes Files/app-service.yaml'"
                     sh "${kubectlCmd} apply -f 'Kubernetes Files/server-deployment.yaml'"
                     sh "${kubectlCmd} apply -f 'Kubernetes Files/server-service.yaml'"
-                    sh "${kubectlCmd} apply -f 'Kubernetes Files/database-deployment.yaml'"
+                    sh "${kubectlCmd} apply -f 'Kubernetes Files/database-statefulset.yaml'"
                     sh "${kubectlCmd} apply -f 'Kubernetes Files/database-service.yaml'"
 
                     sh 'sleep 15'
