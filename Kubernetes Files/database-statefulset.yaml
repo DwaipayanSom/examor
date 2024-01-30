@@ -13,20 +13,20 @@ spec:
       labels:
         app: database
     spec:
-      hostname: database  
       containers:
       - name: database
         image: dwaipayansom/examor-database:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3306
-  podManagementPolicy: OrderedReady  
   volumeClaimTemplates:
   - metadata:
       name: data
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      accessModes: ["ReadWriteOnce"]
       storageClassName: standard
       resources:
         requests:
           storage: 1Gi
+  podManagementPolicy: Parallel  
+  podName: database
