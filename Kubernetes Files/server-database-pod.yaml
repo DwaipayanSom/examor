@@ -5,6 +5,10 @@ metadata:
   labels:
     app: server-database
 spec:
+  initContainers:
+  - name: wait-for-database
+    image: busybox:1.32.0
+    command: ['sh', '-c', 'until nc -z database 3306; do echo "Waiting for database to be ready..."; sleep 15; done;']
   containers:
   - name: server
     image: dwaipayansom/examor-server:latest
