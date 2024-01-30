@@ -23,6 +23,7 @@ spec:
             path: /
             port: 51818
           initialDelaySeconds: 15
+        command: ["sh", "-c", "sleep 15 && pnpm dev:docker"]
       volumes:
       - name: tls-secret-volume
         secret:
