@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: app
-        image: examor/app:latest
-        imagePullPolicy: Never
+        image: dwaipayansom/examor-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 51818
         readinessProbe:
