@@ -7,5 +7,5 @@ spec:
     app: server-database
   ports:
     - protocol: TCP
-      port: 80
+      port: 51717
       targetPort: 51717 
