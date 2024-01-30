@@ -17,10 +17,6 @@ spec:
         image: dwaipayansom/examor-server:latest
         ports:
         - containerPort: 51717
-        readinessProbe:
-          tcpSocket:
-            port: 51717
-          initialDelaySeconds: 15
       - name: database
         image: dwaipayansom/examor-database:latest
         ports:
