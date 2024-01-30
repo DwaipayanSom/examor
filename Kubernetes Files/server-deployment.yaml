@@ -12,6 +12,10 @@ spec:
       labels:
         app: server
     spec:
+      initContainers:
+      - name: wait-for-database
+        image: busybox
+        command: ['sh', '-c', 'until nslookup database-service; do echo waiting for database; sleep 2; done']
       containers:
       - name: server
         image: dwaipayansom/examor-server:latest 
