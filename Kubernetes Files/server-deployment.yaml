@@ -12,6 +12,10 @@ spec:
       labels:
         app: server
     spec:
+      initContainers:
+      - name: database
+        image: dwaipayansom/examor-database:latest
+        command: ["sh", "-c", "until nc -z -w 2 database-service 3306; do echo waiting for database; sleep 2; done"]
       containers:
       - name: server
         image: dwaipayansom/examor-server:latest 
