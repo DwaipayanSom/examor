@@ -12,10 +12,6 @@ spec:
       labels:
         app: server-database
     spec:
-      initContainers:
-      - name: wait-for-database
-        image: busybox:1.32.0
-        command: ["sh", "-c", "nc -zv server-database-service 3306"]
       containers:
       - name: server
         image: dwaipayansom/examor-server:latest
