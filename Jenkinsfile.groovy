@@ -2,12 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REGISTRY = 'index.docker.io'
-        APP_IMAGE_NAME = 'examor/app'
-        SERVER_IMAGE_NAME = 'examor/server'
-        DATABASE_IMAGE_NAME = 'examor/database'
+        APP_IMAGE_NAME = 'examor-app'
+        SERVER_IMAGE_NAME = 'examor-server'
+        DATABASE_IMAGE_NAME = 'examor-database'
         IMAGE_TAG = 'latest'
-        NETWORK_NAME = 'examor-network'
     }
 
     stages {
@@ -17,59 +15,31 @@ pipeline {
             }
         }
 
-        stage('Building and Loading the Docker Images') {
+        stage('Building Docker Images') {
             steps {
                 script {
-                    docker.build("${DOCKER_REGISTRY}/${APP_IMAGE_NAME}:${IMAGE_TAG}", "./app")
-                    docker.build("${DOCKER_REGISTRY}/${SERVER_IMAGE_NAME}:${IMAGE_TAG}", "./server")
-                    docker.build("${DOCKER_REGISTRY}/${DATABASE_IMAGE_NAME}:${IMAGE_TAG}", "./database")
+                    sh 'docker build ./app -t ${APP_IMAGE_NAME}:${IMAGE_TAG}'
+                    sh 'docker build ./server -t ${SERVER_IMAGE_NAME}:${IMAGE_TAG}'
+                    sh 'docker build ./database -t ${DATABASE_IMAGE_NAME}:${IMAGE_TAG}'
                 }
             }
         }
 
-        stage('Create Docker Network') {
+       stage('Login and Push Image') {
             steps {
-                script {
-                    def existingNetwork = sh(script: "docker network ls -q -f name=${NETWORK_NAME}", returnStatus: true).toString().trim()
+                withCredentials([usernamePassword(credentialsId:'dockerhub',passwordVariable:'dockerhub_password',usernameVariable:'dockerhub_username')]){
+                    sh "docker tag ${APP_IMAGE_NAME} ${env.dockerhub_username}/${APP_IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker tag ${SERVER_IMAGE_NAME} ${env.dockerhub_username}/${SERVER_IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker tag ${DATABASE_IMAGE_NAME} ${env.dockerhub_username}/${DATABASE_IMAGE_NAME}:${IMAGE_TAG}"
                     
-                    if (existingNetwork.isEmpty()) {
-                        sh "docker network create ${NETWORK_NAME}"
-                    } else {
-                        echo "Network ${NETWORK_NAME} already exists."
-                    }
+                    sh "docker login -u ${env.dockerhub_username} -p ${env.dockerhub_password}"
+
+                    sh "docker push ${env.dockerhub_username}/${APP_IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker push ${env.dockerhub_username}/${SERVER_IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker push ${env.dockerhub_username}/${DATABASE_IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
-
-        stage('Run Containers in the Network') {
-        steps {
-            script {
-                def databaseContainerExists = sh(script: "docker ps -q -f name=database", returnStatus: true).toString().trim()
-                def serverContainerExists = sh(script: "docker ps -q -f name=server", returnStatus: true).toString().trim()
-                def appContainerExists = sh(script: "docker ps -q -f name=app", returnStatus: true).toString().trim()
-
-                if (databaseContainerExists) {
-                sh "docker stop database"
-                sh "docker rm database"
-                }
-
-                if (serverContainerExists) {
-                sh "docker stop server"
-                sh "docker rm server"
-                }
-
-                if (appContainerExists) {
-                sh "docker stop app"
-                sh "docker rm app"
-                }
-
-                sh "docker run -d --network ${NETWORK_NAME} -p 52020:3306 --name database ${DOCKER_REGISTRY}/${DATABASE_IMAGE_NAME}:${IMAGE_TAG}"
-                sh "docker run -d --network ${NETWORK_NAME} -p 51717:51717 --name server ${DOCKER_REGISTRY}/${SERVER_IMAGE_NAME}:${IMAGE_TAG}"
-                sh "docker run -d --network ${NETWORK_NAME} -p 51818:51818 --name app ${DOCKER_REGISTRY}/${APP_IMAGE_NAME}:${IMAGE_TAG} /bin/sh -c 'sleep 15 && pnpm dev:docker'"
-            }
-        }
-    }
-
         
         stage('Deploy to Minikube') {
             steps {
