@@ -49,12 +49,9 @@ pipeline {
 
                     sh "${kubectlCmd} apply -f 'Kubernetes Files/app-deployment.yaml'"
                     sh "${kubectlCmd} apply -f 'Kubernetes Files/app-service.yaml'"
-                    sh "${kubectlCmd} apply -f 'Kubernetes Files/server-deployment.yaml'"
-                    sh "${kubectlCmd} apply -f 'Kubernetes Files/server-service.yaml'"
-                    sh "${kubectlCmd} apply -f 'Kubernetes Files/database-statefulset.yaml'"
-                    sh "${kubectlCmd} apply -f 'Kubernetes Files/database-service.yaml'"
+                    sh "${kubectlCmd} apply -f 'Kubernetes Files/server-database-pod.yaml'"
+                    sh "${kubectlCmd} apply -f 'Kubernetes Files/server-database-service.yaml'"
 
-                    sh 'sleep 15'
                 }
             }
         }
