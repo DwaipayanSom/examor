@@ -11,8 +11,8 @@ class MySQLHandler:
         self.config = {
             'user': 'root',
             'password': '',
-            'host': 'database' if os.environ.get('DOCKER') else 'localhost',
-            'port': '3306' if os.environ.get('DOCKER') else '52020',
+            'host': 'localhost',
+            'port': '3306',
             'database': 'db',
             'raise_on_warnings': True,
         }
