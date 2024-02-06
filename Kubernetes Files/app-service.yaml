@@ -9,3 +9,4 @@ spec:
   - protocol: TCP
     port: 51818
     targetPort: 51818
+  type: NodePort
