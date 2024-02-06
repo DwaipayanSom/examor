@@ -16,6 +16,7 @@ services:
       - database
     ports:
       - '51717:51717'
+    container_name: 'server'
 
   database:
     build: ./database/
